@@ -1,4 +1,6 @@
-specVersion: 0.0.1
+specVersion: 0.0.4
+description: DDDX protocol natively supports swaps between closely correlated assets via a new curve，which realizes extremely low slippage close to 0 and a low exchange fee rate 0.01%.
+repository: https://github.com/unchase-subgraphs/dddxswap-subgraph
 schema:
   file: ./schema.graphql
 dataSources:
@@ -8,22 +10,46 @@ dataSources:
     source:
       address: "0xb5737A06c330c22056C77a4205D16fFD1436c81b"
       abi: Factory
+      startBlock: 16561749
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
-        - AcceptPauser
-        - PairCreated
-        - SetPauser
+        - Pair
+        - Token
       abis:
         - name: Factory
           file: ./abis/Factory.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: ERC20SymbolBytes
+          file: ./abis/ERC20SymbolBytes.json
+        - name: ERC20NameBytes
+          file: ./abis/ERC20NameBytes.json
       eventHandlers:
-        - event: AcceptPauser(indexed address)
-          handler: handleAcceptPauser
         - event: PairCreated(indexed address,indexed address,bool,address,uint256)
           handler: handlePairCreated
-        - event: SetPauser(indexed address)
-          handler: handleSetPauser
       file: ./src/factory.ts
+templates:
+  - kind: ethereum/contract
+    name: Pair
+    network: bsc
+    source:
+      abi: Pair
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/core.ts
+      entities:
+        - Pair
+        - Token
+      abis:
+        - name: Pair
+          file: ./abis/pair.json
+        - name: Factory
+          file: ./abis/factory.json
+      eventHandlers:
+        - event: Sync(uint112,uint112)
+          handler: handleSync
