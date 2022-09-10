@@ -1,0 +1,29 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Factory
+    network: bsc
+    source:
+      address: "0xb5737A06c330c22056C77a4205D16fFD1436c81b"
+      abi: Factory
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - AcceptPauser
+        - PairCreated
+        - SetPauser
+      abis:
+        - name: Factory
+          file: ./abis/Factory.json
+      eventHandlers:
+        - event: AcceptPauser(indexed address)
+          handler: handleAcceptPauser
+        - event: PairCreated(indexed address,indexed address,bool,address,uint256)
+          handler: handlePairCreated
+        - event: SetPauser(indexed address)
+          handler: handleSetPauser
+      file: ./src/factory.ts
