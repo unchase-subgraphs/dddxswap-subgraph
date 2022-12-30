@@ -1,4 +1,4 @@
-specVersion: 0.0.4
+specVersion: 0.0.5
 description: DDDX protocol natively supports swaps between closely correlated assets via a new curve，which realizes extremely low slippage close to 0 and a low exchange fee rate 0.01%.
 repository: https://github.com/unchase-subgraphs/dddxswap-subgraph
 schema:
@@ -13,7 +13,7 @@ dataSources:
       startBlock: 16561749
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Pair
@@ -39,7 +39,7 @@ templates:
       abi: Pair
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       file: ./src/core.ts
       entities:
